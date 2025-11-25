@@ -39,6 +39,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
+app.UseAzureAppConfiguration();
+
 app.UseAntiforgery();
 
 app.MapStaticAssets();

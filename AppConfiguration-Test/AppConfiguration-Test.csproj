@@ -9,4 +9,9 @@
         <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.AzureAppConfiguration" Version="8.4.0" />
+      <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="4.3.0" />
+    </ItemGroup>
+
 </Project>

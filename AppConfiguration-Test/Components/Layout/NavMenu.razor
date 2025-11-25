@@ -1,4 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Microsoft.FeatureManagement
+@inject IFeatureManager FeatureManager
+@inject IWebHostEnvironment WebHostEnvironment
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">AppConfiguration-Test</a>
     </div>
@@ -20,10 +24,26 @@
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
+        @if (_isWeatherEnabled)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="weather">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
+                </NavLink>
+            </div>
+        }
     </nav>
 </div>
+
+@code {
+
+    private bool _isWeatherEnabled;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var weatherFeatureEnabled = await FeatureManager.IsEnabledAsync("WeatherEnabled");
+        
+        _isWeatherEnabled = WebHostEnvironment.IsDevelopment() || weatherFeatureEnabled;
+    }
+
+}

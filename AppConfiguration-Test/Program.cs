@@ -1,10 +1,30 @@
 using AppConfiguration_Test.Components;
+using Azure.Identity;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddAzureAppConfiguration();
+builder.Services.AddFeatureManagement();
+
+if (builder.Environment.IsDevelopment() is false)
+{
+    builder.Configuration.AddAzureAppConfiguration(options =>
+    {
+        options.Connect(new Uri(builder.Configuration["APPCONFIG_ENDPOINT"]), new DefaultAzureCredential())
+            .ConfigureRefresh(refresh =>
+                refresh.Register("Counter:IncrementBy").SetCacheExpiration(TimeSpan.FromSeconds(10)));
+        
+        options.UseFeatureFlags(options =>
+        {
+            options.CacheExpirationInterval = TimeSpan.FromSeconds(10);
+        });
+    });
+}
 
 var app = builder.Build();
 

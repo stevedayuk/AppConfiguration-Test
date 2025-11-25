@@ -1,20 +1,30 @@
 ﻿@page "/counter"
 @rendermode InteractiveServer
+@inject IConfiguration Configuration
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p>Incrementing count by @incrementBy</p>
+
+<p role="status" class="fw-bold">Current count: @currentCount</p>
 
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
     private int currentCount = 0;
+    private int incrementBy = 1;
+
+    protected override void OnInitialized()
+    {
+        string incrementByString = Configuration["Counter:IncrementBy"];
+        incrementBy = int.Parse(incrementByString);
+    }
 
     private void IncrementCount()
     {
-        currentCount++;
+        currentCount += incrementBy;
     }
 
 }

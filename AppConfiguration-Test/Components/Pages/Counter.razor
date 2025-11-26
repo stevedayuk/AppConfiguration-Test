@@ -1,6 +1,8 @@
 ﻿@page "/counter"
+@using Microsoft.FeatureManagement.Mvc
 @rendermode InteractiveServer
 @inject IConfiguration Configuration
+@attribute [FeatureGate("WeatherEnabled")]
 
 <PageTitle>Counter</PageTitle>
 
